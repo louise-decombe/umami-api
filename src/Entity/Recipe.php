@@ -6,21 +6,29 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RecipeRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * @ORM\Entity(repositoryClass=RecipeRepository::class)
  */
-#[ApiResource(
-    normalizationContext: ['groups' => ['read:collection']],
+#[
+ApiResource(
+    collectionOperations: ['get',
+    'post'],
     itemOperations: [
-        'put'=> [
-            'denormalization_context' => ['groups' => ['put:Recipe']]
-        ],
-        'delete',
-        'get' => [
-            'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe']]
-        ]
+    'put' => [
+        'denormalization_context' => ['groups' => ['put:Recipe']]
+    ],
+    'delete',
+    'get' => [
+        'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe']]
     ]
+],
+    attributes: [
+    'validation_groups' => []
+],
+    normalizationContext: ['groups' => ['read:collection']]
 )]
 
 class Recipe
@@ -35,7 +43,9 @@ class Recipe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:collection', 'write:Recipe'])]
+    #[Groups(['read:collection', 'write:Recipe']),
+        Length(min: 5, groups: ['create:Recipe'])
+    ]
     private $title;
 
     /**
@@ -62,11 +72,18 @@ class Recipe
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes", cascade="persist")
      */
-    #[Groups(['read:item', 'put:Recipe'])]
-
+    #[Groups(['read:item', 'write:Recipe']),
+        Valid()
+    ]
     private $category;
+
+
+    public static function validationGroups(self $post): array
+    {
+        return ['create:Recipe'];
+    }
 
     public function __construct()
     {
@@ -127,14 +144,14 @@ class Recipe
         return $this;
     }
 
-    public function getUpdated�At(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updated�_at;
+        return $this->updated_at;
     }
 
-    public function setUpdated�At(?\DateTimeInterface $updated�_at): self
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
-        $this->updated�_at = $updated�_at;
+        $this->updated_at = $updated_at;
 
         return $this;
     }
