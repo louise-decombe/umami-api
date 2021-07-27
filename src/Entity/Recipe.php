@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     normalizationContext: ['groups' => ['read:collection']],
     itemOperations: [
+        'put'=> [
+            'denormalization_context' => ['groups' => ['put:Recipe']]
+        ],
+        'delete',
         'get' => [
             'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe']]
         ]
@@ -31,32 +35,44 @@ class Recipe
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:collection', 'write:Recipe'])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(['read:collection'])]
     private $slug;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(['read:item', 'write:Recipe'])]
     private $content;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
+    #[Groups(['read:item'])]
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated�_at;
+    private $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes")
      */
+    #[Groups(['read:item', 'put:Recipe'])]
+
     private $category;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
