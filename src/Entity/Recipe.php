@@ -2,34 +2,30 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\RecipeRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * @ORM\Entity(repositoryClass=RecipeRepository::class)
  */
-#[
-ApiResource(
-    collectionOperations: ['get',
-    'post'],
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:collection']],
+    paginationItemsPerPage: 2,
+    paginationMaximumItemsPerPage: 2,
+    paginationClientItemsPerPage: true,
     itemOperations: [
-    'put' => [
-        'denormalization_context' => ['groups' => ['put:Recipe']]
-    ],
-    'delete',
-    'get' => [
-        'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe']]
+        'get' => [
+            'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe']]
+        ]
     ]
-],
-    attributes: [
-    'validation_groups' => []
-],
-    normalizationContext: ['groups' => ['read:collection']]
 )]
+    #[ApiFilter(
+        SearchFilter::class, properties: ['id'=> 'exact', 'title'=>'partial']
+    )]
 
 class Recipe
 {
@@ -43,53 +39,32 @@ class Recipe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:collection', 'write:Recipe']),
-        Length(min: 5, groups: ['create:Recipe'])
-    ]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['read:collection'])]
     private $slug;
 
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['read:item', 'write:Recipe'])]
     private $content;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    #[Groups(['read:item'])]
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    private $updated�_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes", cascade="persist")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes")
      */
-    #[Groups(['read:item', 'write:Recipe']),
-        Valid()
-    ]
     private $category;
-
-
-    public static function validationGroups(self $post): array
-    {
-        return ['create:Recipe'];
-    }
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
-    }
 
     public function getId(): ?int
     {
@@ -144,14 +119,14 @@ class Recipe
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdated�At(): ?\DateTimeInterface
     {
-        return $this->updated_at;
+        return $this->updated�_at;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
+    public function setUpdated�At(?\DateTimeInterface $updated�_at): self
     {
-        $this->updated_at = $updated_at;
+        $this->updated�_at = $updated�_at;
 
         return $this;
     }
