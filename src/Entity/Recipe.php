@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\RecipePublishController;
 use App\Repository\RecipeRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,13 +15,42 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=RecipeRepository::class)
  */
 #[ApiResource(
-    normalizationContext: ['groups' => ['read:collection']],
+    normalizationContext: [
+        'groups' => ['read:collection'],
+        'openapi_definition_name' => 'Collection'
+    ],
     paginationItemsPerPage: 2,
     paginationMaximumItemsPerPage: 2,
     paginationClientItemsPerPage: true,
+    collectionOperations: [
+        'get',
+        'post',
+        'count' => [
+            'method' => 'GET',
+            'path' => '/post/count',
+            'controller' => RecipeCountController::class
+        ]
+],
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe']]
+            'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Recipe'],
+            'openapi_definition_name' => 'Detail'
+            ]
+        ],
+        'publish' => [
+            'method' => 'POST',
+            'path'=> '/posts/{id}/publish',
+            'controller'=> RecipePublishController::class,
+            'openapi_context'=> [
+                'summary' => 'permet de publier une recette de cuisine',
+                'requestBody'=> [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => []
+                        ]
+                    ]
+                ]
+            ]
         ]
     ]
 )]
@@ -59,12 +90,20 @@ class Recipe
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated�_at;
+    private $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes")
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default":"0"})
+     */
+    #[Groups(['read:collection']),
+    ApiProperty(openapiContext: ['type'=>'boolean', 'description' => 'description'])
+    ]
+    private $online;
 
     public function getId(): ?int
     {
@@ -119,14 +158,14 @@ class Recipe
         return $this;
     }
 
-    public function getUpdated�At(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updated�_at;
+        return $this->updated_at;
     }
 
-    public function setUpdated�At(?\DateTimeInterface $updated�_at): self
+    public function setUpdatedAt(?\DateTimeInterface $updated�_at): self
     {
-        $this->updated�_at = $updated�_at;
+        $this->updated_at = $updated�_at;
 
         return $this;
     }
@@ -139,6 +178,18 @@ class Recipe
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getOnline(): ?bool
+    {
+        return $this->online;
+    }
+
+    public function setOnline(bool $online): self
+    {
+        $this->online = $online;
 
         return $this;
     }
