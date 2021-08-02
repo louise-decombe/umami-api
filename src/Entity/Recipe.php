@@ -15,13 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=RecipeRepository::class)
  */
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['read:collection'],
-        'openapi_definition_name' => 'Collection'
-    ],
-    paginationItemsPerPage: 2,
-    paginationMaximumItemsPerPage: 2,
-    paginationClientItemsPerPage: true,
     collectionOperations: [
         'get',
         'post',
@@ -52,7 +45,14 @@ use Doctrine\ORM\Mapping as ORM;
                 ]
             ]
         ]
-    ]
+    ],
+    normalizationContext: [
+        'groups' => ['read:collection'],
+        'openapi_definition_name' => 'Collection'
+    ],
+    paginationClientItemsPerPage: true,
+    paginationItemsPerPage: 2,
+    paginationMaximumItemsPerPage: 2
 )]
     #[ApiFilter(
         SearchFilter::class, properties: ['id'=> 'exact', 'title'=>'partial']
