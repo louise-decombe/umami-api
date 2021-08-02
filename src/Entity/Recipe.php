@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\RecipeCountController;
 use App\Controller\RecipePublishController;
 use App\Repository\RecipeRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,7 +22,14 @@ use Doctrine\ORM\Mapping as ORM;
         'count' => [
             'method' => 'GET',
             'path' => '/post/count',
-            'controller' => RecipeCountController::class
+            'controller' => RecipeCountController::class,
+            'read'=> false,
+            'pagination_enabled'=> false,
+            'filters'=>  [],
+            'openapi_context'=> [
+                'summary'=>'Nombre de rectte correspondantes',
+                'parameters'=> [],
+            ]
         ]
 ],
     itemOperations: [
@@ -103,7 +111,7 @@ class Recipe
     #[Groups(['read:collection']),
     ApiProperty(openapiContext: ['type'=>'boolean', 'description' => 'description'])
     ]
-    private $online;
+    private ?bool $online;
 
     public function getId(): ?int
     {
