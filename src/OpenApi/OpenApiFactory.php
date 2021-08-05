@@ -11,7 +11,6 @@ class OpenApiFactory implements OpenApiFactoryInterface
     {
 
 
-
     }
 
 }
