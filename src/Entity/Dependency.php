@@ -37,8 +37,25 @@ class Dependency {
         string $version
     )
     {
+        $this->uuid = $uuid;
+        $this->name = $name;
+        $this->version = $version;
 
+    }
 
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
     }
 
 }
