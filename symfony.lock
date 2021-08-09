@@ -16,6 +16,9 @@
             "src/Entity/.gitignore"
         ]
     },
+    "brick/math": {
+        "version": "0.9.2"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
@@ -214,6 +217,12 @@
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "ramsey/collection": {
+        "version": "1.2.1"
+    },
+    "ramsey/uuid": {
+        "version": "4.2.0"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"
