@@ -10,8 +10,9 @@ You need to have docker installed / everything needed for the install is in the 
 
     $ git clone
     $ cd umami-api
-    $ docker-compose up -d
-    $ docker exec -it www bash
+    $ composer install
+    $ npm install
+    $ symfony serve
 
 You can now go to https://localhost
 
