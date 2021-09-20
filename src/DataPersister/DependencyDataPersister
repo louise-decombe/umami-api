@@ -4,12 +4,13 @@ namespace App\DataPersister;
 
 use ApiPlatform\Core\Api\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
+use App\Entity\Dependency;
 
 class DependencyDataPersister implements ContextAwareDataPersisterInterface {
 
     public function supports($data, array $context = []): bool
     {
-        // TODO: Implement supports() method.
+        return $data instanceof Dependency;
     }
 
     public function persist($data, array $context = [])

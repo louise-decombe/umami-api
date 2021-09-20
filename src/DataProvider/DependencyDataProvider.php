@@ -36,7 +36,7 @@ class DependencyDataProvider implements ContextAwareCollectionDataProviderInterf
         $items = [];
 
         foreach ($this->getDependencies() as $name => $version){
-            $items[] = new Dependency(Uuid::uuid5(Uuid::NAMESPACE_URL, $name)->toString(), $name, $version);
+            $items[] = new Dependency( $name, $version);
         }
 
         return $items;
@@ -61,7 +61,7 @@ class DependencyDataProvider implements ContextAwareCollectionDataProviderInterf
             $uuid = Uuid::uuid5(Uuid::NAMESPACE_URL, $name)->toString();
 
             if ($uuid == $id){
-                return new Dependency($uuid, $name, $version
+                return new Dependency($name, $version
                 );
             }
 

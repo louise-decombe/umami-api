@@ -78,32 +78,32 @@ class Recipe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private ?string $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $slug;
+    private ?string $slug;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $content;
+    private ?string $content;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    private ?\DateTimeInterface $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    private ?\DateTimeInterface $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="recipes")
      */
-    private $category;
+    private ?Category $category;
 
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})

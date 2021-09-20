@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
 #[ApiResource(
-    collectionOperations: [get, post],
     itemOperations: ['put','patch','delete',
         'get'=>[
             'controller'=> NotFoundAction::class,
@@ -33,12 +32,12 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Recipe::class, mappedBy="category")
      */
-    private $recipes;
+    private ArrayCollection $recipes;
 
     public function __construct()
     {
@@ -63,7 +62,7 @@ class Category
     }
 
     /**
-     * @return Collection|Recipe[]
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRecipes(): Collection
     {

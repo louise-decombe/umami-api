@@ -5,11 +5,14 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints\Uuid;
 
 #[ApiResource(
-    itemOperations: ['get'], collectionOperations: ['get']
+     collectionOperations: ['get', 'post'],
+    itemOperations: ['get'],
 )]
-class Dependency {
+class Dependency
+{
 
 
     #[ApiProperty(
@@ -45,7 +48,7 @@ class Dependency {
 
     public function getUuid(): string
     {
-        return $this->uuid;
+        return $this->uuid = Uuid::uuid5(Uuid::NAMESPACE_URL, $name)->toString();
     }
 
     public function getName(): string
