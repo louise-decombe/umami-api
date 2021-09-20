@@ -6,7 +6,7 @@ REST API for cooks made with API Platform
 
 ## Install
 
-You need to have docker installed / everything needed for the install is in the docker-compose.
+Api running with PHP 8, Symfony 5.3.
 
     $ git clone
     $ cd umami-api
