@@ -29,19 +29,7 @@ class DependencyDataProvider implements ContextAwareCollectionDataProviderInterf
             return $json['require'];
     }
 
-    public function getCollection(string $resourceClass, string $operationName = null, array $context = [])
-    {
 
-
-        $items = [];
-
-        foreach ($this->getDependencies() as $name => $version){
-            $items[] = new Dependency( $name, $version);
-        }
-
-        return $items;
-
-    }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
@@ -61,11 +49,15 @@ class DependencyDataProvider implements ContextAwareCollectionDataProviderInterf
             $uuid = Uuid::uuid5(Uuid::NAMESPACE_URL, $name)->toString();
 
             if ($uuid == $id){
-                return new Dependency($name, $version
-                );
+                return new Dependency($name, $version);
             }
 
         }
 
+    }
+
+    public function getCollection(string $resourceClass, string $operationName = null, array $context = [])
+    {
+        // TODO: Implement getCollection() method.
     }
 }
