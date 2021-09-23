@@ -17,6 +17,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        # put it before all your other firewall API entries
+        refresh:
+            pattern: ^/api/token/refresh
+            stateless: true
+            anonymous: true
         login:
             pattern: ^/api/login$
             stateless: true
@@ -50,9 +55,7 @@ security:
             # guard:
             #     authenticators:
             #         - App\Security\AppAuthenticator
-
-
-
     access_control:
-         - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_SUER }
          - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
