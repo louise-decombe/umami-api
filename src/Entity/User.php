@@ -6,6 +6,8 @@ use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -66,6 +68,16 @@ class User implements UserInterface, JWTUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Recipe::class, mappedBy="user")
+     */
+    private $recipes;
+
+    public function __construct()
+    {
+        $this->recipes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -158,5 +170,35 @@ class User implements UserInterface, JWTUserInterface
     public static function createFromPayload($username, array $payload): User|JWTUserInterface
     {
         return (new User())->setId($username)->setEmail($payload['username'] ?? '');
+    }
+
+    /**
+     * @return Collection|Recipe[]
+     */
+    public function getRecipes(): Collection
+    {
+        return $this->recipes;
+    }
+
+    public function addRecipe(Recipe $recipe): self
+    {
+        if (!$this->recipes->contains($recipe)) {
+            $this->recipes[] = $recipe;
+            $recipe->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipe(Recipe $recipe): self
+    {
+        if ($this->recipes->removeElement($recipe)) {
+            // set the owning side to null (unless already changed)
+            if ($recipe->getUser() === $this) {
+                $recipe->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

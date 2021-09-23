@@ -113,6 +113,11 @@ class Recipe
     ]
     private ?bool $online;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="recipes")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -198,6 +203,18 @@ class Recipe
     public function setOnline(bool $online): self
     {
         $this->online = $online;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
