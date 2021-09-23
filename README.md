@@ -4,6 +4,7 @@
 # umami-api
 REST API for cooks made with API Platform 
 
+
 ## Install
 
 Api running with PHP 8, Symfony 5.3.
@@ -15,7 +16,8 @@ Api running with PHP 8, Symfony 5.3.
     $ php bin/console d:m:m
     $ symfony serve
 
-You can now go to https://localhost
-
+You can now go to your https://localhost
+If you want to see the API and try it got to the /api route.
+You can register a user, navigate through the admin panel and load fixtures. 
 
 You can also visit the api, quickly deployed thanks to Heroku at this address : 
