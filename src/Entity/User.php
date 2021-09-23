@@ -155,8 +155,8 @@ class User implements UserInterface, JWTUserInterface
         // $this->plainPassword = null;
     }
 
-    public static function createFromPayload($id, array $payload)
+    public static function createFromPayload($username, array $payload): User|JWTUserInterface
     {
-        return (new User())->setId($id)->setEmail($payload['username'] ?? '');
+        return (new User())->setId($username)->setEmail($payload['username'] ?? '');
     }
 }
