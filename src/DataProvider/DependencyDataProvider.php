@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
 class DependencyDataProvider implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface, ItemDataProviderInterface
 {
 
-    public function __construct(private DependencyRepository $repository) {}
+    public function __construct(private DependencyRepository $dependencyRepository) {}
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
@@ -22,11 +22,11 @@ class DependencyDataProvider implements ContextAwareCollectionDataProviderInterf
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
-        return $this->repository->find($id);
+        return $this->dependencyRepository->find($id);
     }
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = [])
     {
-        return $this->repository->findAll();
+        return $this->dependencyRepository->findAll();
     }
 }

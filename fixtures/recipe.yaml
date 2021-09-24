@@ -1,0 +1,8 @@
+App\Entity\Recipe:
+  Recipe_{1..100}:
+    title: <sentence(4)>
+    slug: <sentence(1)>
+    content: <text()>
+    createdAt: <dateTime()>
+    updatedAt: <dateTime()>
+    online: <numberBetween(0, 1)>
