@@ -10,17 +10,28 @@ REST API for cooks made with API Platform
 Api running with PHP 8, Symfony 5.3.
 
     Clone the project
+    
     $ git clone
     $ cd umami-api
+    
     Install all dependencies
+    
     $ composer install
     $ npm install
+    
     Create and migrate database
+    
     $ php bin/console d:d:c
     $ php bin/console d:m:m
+    
+    Load fixtures :
+    $ php app/console doctrine:fixtures:load
+    
+    Start server : 
     $ symfony serve
+    
     Run test with this command :
-    $ newman run ./postman/postman_collection.json -e ./postman/postman_environment.json
+    $ php bin/phpunit
 
 You can now go to your https://localhost
 If you want to see the API and try it got to the /api route.
